@@ -45,18 +45,19 @@
         }
         .balloon {
             position: absolute;
-            width: 50px;
-            height: 70px;
-            background-color: red;
+            width: 60px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255,0,150,1) 0%, rgba(255,80,80,1) 70%);
             border-radius: 50%;
-            opacity: 0.8;
+            opacity: 0.9;
             animation: float 6s linear infinite;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .balloon:nth-child(1) { left: 10%; animation-duration: 5s; background-color: pink; }
-        .balloon:nth-child(2) { left: 30%; animation-duration: 7s; background-color: #ff4d4d; }
-        .balloon:nth-child(3) { left: 50%; animation-duration: 6.5s; background-color: hotpink; }
-        .balloon:nth-child(4) { left: 70%; animation-duration: 5.5s; background-color: red; }
-        .balloon:nth-child(5) { left: 90%; animation-duration: 6.2s; background-color: lightcoral; }
+        .balloon:nth-child(1) { left: 10%; animation-duration: 5s; background: radial-gradient(circle, #ff66b2 0%, #ff1493 70%); }
+        .balloon:nth-child(2) { left: 30%; animation-duration: 7s; background: radial-gradient(circle, #ff5050 0%, #ff0000 70%); }
+        .balloon:nth-child(3) { left: 50%; animation-duration: 6.5s; background: radial-gradient(circle, #ff9966 0%, #ff4500 70%); }
+        .balloon:nth-child(4) { left: 70%; animation-duration: 5.5s; background: radial-gradient(circle, #ffcc66 0%, #ff8c00 70%); }
+        .balloon:nth-child(5) { left: 90%; animation-duration: 6.2s; background: radial-gradient(circle, #ff66ff 0%, #ff00ff 70%); }
 
         /* Floating Hearts Animation */
         @keyframes floatHearts {
@@ -71,13 +72,55 @@
         }
         .heart {
             position: absolute;
-            font-size: 24px;
+            font-size: 30px;
             animation: floatHearts 6s linear infinite;
         }
-        .heart:nth-child(1) { left: 20%; animation-duration: 4.5s; }
-        .heart:nth-child(2) { left: 40%; animation-duration: 6s; }
-        .heart:nth-child(3) { left: 60%; animation-duration: 5.5s; }
-        .heart:nth-child(4) { left: 80%; animation-duration: 4s; }
+        .heart:nth-child(1) { left: 15%; animation-duration: 4.5s; }
+        .heart:nth-child(2) { left: 35%; animation-duration: 6s; }
+        .heart:nth-child(3) { left: 55%; animation-duration: 5.5s; }
+        .heart:nth-child(4) { left: 75%; animation-duration: 4s; }
+
+        /* Chatbot Section */
+        .chat-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #d14747;
+        }
+        #response {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #d14747;
+            text-align: left;
+            padding: 10px;
+            background-color: #fff0f5;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -129,7 +172,10 @@
 
             responseDiv.innerHTML = "⏳ Searching for the best love advice...";
 
-            let apiUrl = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=YOUR_API_KEY&cx=YOUR_CSE_ID&num=1`;
+            let apiKey = "AIzaSyBdH7cA3PFmDFCjAhsnDDwR_orSFCxDQbI";  // Your Google API Key
+            let cseId = "03b0896b67aa74789";  // Your Custom Search Engine ID
+
+            let apiUrl = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${cseId}&num=1`;
 
             try {
                 let res = await fetch(apiUrl);
@@ -140,11 +186,7 @@
                     let snippet = result.snippet || "💔 Sorry, I couldn't find an exact answer, but you can check this:";
                     let link = result.link;
 
-                    responseDiv.innerHTML = `
-                        ❤️ <b>${new Date().toDateString()}</b><br><br>
-                        <b>Love Advice:</b> ${snippet}<br><br>
-                        <a href="${link}" target="_blank">Read more</a>
-                    `;
+                    responseDiv.innerHTML = `<b>Love Advice:</b> ${snippet}<br><br><a href="${link}" target="_blank">Read more</a>`;
                 } else {
                     responseDiv.innerHTML = "💔 Sorry, I couldn't find an answer. Try another question!";
                 }
